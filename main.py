@@ -1,5 +1,6 @@
 import sys
 import os
+import argparse
 from config import Config
 from lexer import Lexer
 from parser_js import Parser
@@ -7,18 +8,35 @@ from engine import LinterEngine
 from fixer import Fixer
 
 def main():
-    if len(sys.argv) < 2:
-        print("Usage: python main.py <path_to_js_file> [path_to_config.json]")
+    parser = argparse.ArgumentParser(
+        prog='js_linter',
+        description='JS Linter: Анализ синтаксиса, стиля и сложности JavaScript кода', 
+        formatter_class=argparse.RawTextHelpFormatter
+    )
+
+    parser.add_argument(
+        '--fix', 
+        action='store_true', 
+        help='Включить автоматическое исправление ошибок'
+    )
+
+    args = parser.parse_args()
+
+    if not args.path:
+        parser.print_help()
         return
 
-    js_file_path = sys.argv[1]
-    config_path = sys.argv[2] if len(sys.argv) > 2 else 'style_config.json'
+    js_file_path = args.path
+    config_path = args.config
 
     if not os.path.exists(js_file_path):
         print(f"Error: File {js_file_path} not found.")
         return
 
     config = Config(config_path)
+    
+    if args.fix:
+        config.data['autofix'] = True
 
     with open(js_file_path, 'r', encoding='utf-8') as f:
         original_code = f.read()
@@ -40,7 +58,7 @@ def main():
 
     engine.run(tokens, ast, fixer)
 
-    print(f"\n--- Linting Report for: {js_file_path} ---")
+    print(f"\nLinting Report for: {js_file_path}")
     if not engine.reports:
         print("Success: No style issues found.")
     else:
