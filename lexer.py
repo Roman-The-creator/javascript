@@ -44,17 +44,13 @@ class Lexer:
             if kind == 'NEWLINE':
                 line_start = start_idx + 1
                 line_num += 1
-                # Мы не добавляем NEWLINE в токены, чтобы не усложнять парсер, 
-                # но вы можете добавить, если это нужно для правил
                 continue
             elif kind == 'SKIP':
-                # Пробелы сохраняем как тип SKIP для правил форматирования
                 token = Token(kind, value, line_num, column)
                 token.start_idx = start_idx
                 token.end_idx = mo.end()
                 self.tokens.append(token)
             elif kind == 'MISMATCH':
-                # Вместо того чтобы падать, мы просто выводим ошибку в консоль
                 print(f"Lexical Error: Unexpected character {repr(value)} at line {line_num}")
             else:
                 # Основные токены
