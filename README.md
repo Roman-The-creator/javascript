@@ -7,3 +7,12 @@
 - **Правила** 
 - **Анализ логики** 
 - **Autofix** 
+
+## Зависимости
+стандартная библиотека Python
+
+## Как использовать
+Запуск: python run_all_test.py
+Простая проверка файла: python main.py path/to/file.js
+Проверка с исправлением: python main.py file.js --fix
+python main.py my_script.js --config
