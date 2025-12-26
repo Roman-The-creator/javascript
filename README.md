@@ -13,7 +13,7 @@
 
 ## Как использовать
 
-Запуск: python run_all_test.py
+Запуск тестов: python run_all_test.py
 
 Простая проверка файла: python main.py path/to/file.js
 
